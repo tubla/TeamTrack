@@ -10,7 +10,7 @@ namespace TeamTrack.Api.Controllers
 {
     [ApiController]
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{version:apiVersion}/organizations")]
     [Authorize]
     public class OrganizationController(IOrganizationService service) : ControllerBase
     {

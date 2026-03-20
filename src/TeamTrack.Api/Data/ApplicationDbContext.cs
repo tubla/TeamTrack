@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using TeamTrack.Api.Interfaces;
 using TeamTrack.Api.Models;
 using TeamTrack.Api.Models.Rbac;
-using TeamTrack.Api.Models.Rbac.Constants;
 
 namespace TeamTrack.Api.Data
 {
@@ -19,6 +17,15 @@ namespace TeamTrack.Api.Data
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+
+        // Project and Task entities would go here
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<TaskItem> Tasks { get; set; }
+        public DbSet<TaskComment> TaskComments { get; set; }
+        public DbSet<ActivityLog> ActivityLogs { get; set; }
+
+        // Notifications
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -94,6 +101,24 @@ namespace TeamTrack.Api.Data
 
             modelBuilder.Entity<RolePermission>()
                 .HasIndex(rp => new { rp.RoleId, rp.PermissionId });
+
+            modelBuilder.Entity<Project>()
+                .HasIndex(p => new { p.OrganizationId, p.Name });
+
+            modelBuilder.Entity<TaskItem>()
+                .HasIndex(t => new { t.ProjectId, t.Status });
+
+            modelBuilder.Entity<TaskItem>()
+                .HasIndex(t => t.AssignedToUserId);
+
+            modelBuilder.Entity<TaskComment>()
+                .HasIndex(c => c.TaskId);
+
+            modelBuilder.Entity<ActivityLog>()
+                .HasIndex(a => new { a.OrganizationId, a.EntityId });
+
+            modelBuilder.Entity<Notification>()
+                .HasIndex(n => new { n.UserId, n.IsRead });
 
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())

@@ -46,6 +46,10 @@ namespace TeamTrack.Api.Extensions
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
             services.AddHostedService<QueuedHostedService>();
             services.AddScoped<ICacheService, MemoryCacheService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<INotificationService, NotificationService>();
 
             services.AddJwtAuthentication(config);
             services.AddAuthorizationBuilder()

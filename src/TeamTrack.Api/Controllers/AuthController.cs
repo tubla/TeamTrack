@@ -10,7 +10,7 @@ namespace TeamTrack.Api.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [EnableRateLimiting("auth")]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{version:apiVersion}/authentications")]
     public class AuthController(IAuthService service) : ControllerBase
     {
         private readonly IAuthService _service = service;
