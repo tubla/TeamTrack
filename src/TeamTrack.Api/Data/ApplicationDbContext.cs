@@ -27,6 +27,9 @@ namespace TeamTrack.Api.Data
         // Notifications
         public DbSet<Notification> Notifications { get; set; }
 
+        // Media file uploads
+        public DbSet<Attachment> Attachments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -119,6 +122,9 @@ namespace TeamTrack.Api.Data
 
             modelBuilder.Entity<Notification>()
                 .HasIndex(n => new { n.UserId, n.IsRead });
+
+            modelBuilder.Entity<Attachment>()
+                .HasIndex(a => a.TaskId);
 
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())

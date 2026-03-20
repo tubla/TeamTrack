@@ -50,6 +50,7 @@ namespace TeamTrack.Api.Extensions
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IFileService, LocalFileService>();
 
             services.AddJwtAuthentication(config);
             services.AddAuthorizationBuilder()

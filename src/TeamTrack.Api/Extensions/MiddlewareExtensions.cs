@@ -37,6 +37,7 @@ namespace TeamTrack.Api.Extensions
             app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseStaticFiles();
             app.MapControllers();
             return app;
         }
