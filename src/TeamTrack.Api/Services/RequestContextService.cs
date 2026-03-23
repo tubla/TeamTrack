@@ -24,9 +24,18 @@ namespace TeamTrack.Api.Services
         {
             get
             {
-                var orgId = _httpContextAccessor.HttpContext?.Request.Headers["X-Organization-Id"].FirstOrDefault();
+                // First check the header
+                var orgIdHeader = _httpContextAccessor.HttpContext?
+                    .Request.Headers["X-Organization-Id"].FirstOrDefault();
 
-                return Guid.TryParse(orgId, out var id) ? id : null;
+                if (Guid.TryParse(orgIdHeader, out var headerId))
+                    return headerId;
+
+                // Fallback to JWT claim
+                var orgClaim = _httpContextAccessor.HttpContext?.User?
+                    .FindFirst("organizationId")?.Value;
+
+                return Guid.TryParse(orgClaim, out var claimId) ? claimId : null;
             }
         }
     }

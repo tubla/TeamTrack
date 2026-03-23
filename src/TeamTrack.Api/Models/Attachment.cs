@@ -1,14 +1,17 @@
-﻿namespace TeamTrack.Api.Models
+﻿namespace TeamTrack.Api.Models;
+
+public class Attachment : BaseEntity
 {
-    public class Attachment : BaseEntity
-    {
-        public string FileName { get; set; } = default!;
-        public string FileUrl { get; set; } = default!;
-        public string ContentType { get; set; } = default!;
+    public required string FileName { get; set; }
+    public required string FileUrl { get; set; }
+    public required string ContentType { get; set; }
 
-        public Guid UploadedByUserId { get; set; }
+    public Guid UploadedByUserId { get; set; }
+    public User UploadedByUser { get; set; } = null!;
 
-        public Guid? TaskId { get; set; }
-        public TaskItem? Task { get; set; }
-    }
+    public Guid OrganizationId { get; set; }
+    public Organization Organization { get; set; } = null!;
+
+    public Guid? TaskId { get; set; }
+    public TaskItem? Task { get; set; }
 }

@@ -1,16 +1,15 @@
-﻿namespace TeamTrack.Api.Models
+﻿namespace TeamTrack.Api.Models;
+
+public class Project : BaseEntity
 {
-    public class Project : BaseEntity
-    {
-        public string Name { get; set; } = default!;
-        public string? Description { get; set; }
+    public required string Name { get; set; }
+    public string? Description { get; set; }
 
-        public Guid OrganizationId { get; set; }
-        public Organization Organization { get; set; } = default!;
+    public Guid OrganizationId { get; set; }
+    public Organization Organization { get; set; } = null!;
 
-        public Guid CreatedByUserId { get; set; }
+    public Guid CreatedByUserId { get; set; }
 
-        // Navigation
-        public ICollection<TaskItem> Tasks { get; set; } = [];
-    }
+    // Navigation
+    public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
 }

@@ -1,0 +1,9 @@
+﻿namespace TeamTrack.Api.DTOs.Dashboard;
+
+public class TaskDistributionDto
+{
+    public int Todo { get; set; }
+    public int InProgress { get; set; }
+    public int Review { get; set; }
+    public int Done { get; set; }
+}

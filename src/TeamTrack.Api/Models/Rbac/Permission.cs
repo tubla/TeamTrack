@@ -1,10 +1,9 @@
-﻿namespace TeamTrack.Api.Models.Rbac
-{
-    public class Permission : BaseEntity
-    {
-        public string Name { get; set; } = default!;
+﻿namespace TeamTrack.Api.Models.Rbac;
 
-        // Navigation
-        public ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
-    }
+public class Permission : BaseEntity
+{
+    public required string Name { get; set; }
+
+    // Navigation
+    public ICollection<RolePermission> RolePermissions { get; set; } = [];
 }

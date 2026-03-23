@@ -1,20 +1,19 @@
-﻿namespace TeamTrack.Api.Models
+﻿namespace TeamTrack.Api.Models;
+
+public class TaskItem : BaseEntity
 {
-    public class TaskItem : BaseEntity
-    {
-        public string Title { get; set; } = default!;
-        public string? Description { get; set; }
+    public required string Title { get; set; }
+    public string? Description { get; set; }
 
-        public Guid ProjectId { get; set; }
-        public Project Project { get; set; } = default!;
+    public Guid ProjectId { get; set; }
+    public Project Project { get; set; } = null!;
 
-        public Guid? AssignedToUserId { get; set; }
+    public Guid? AssignedToUserId { get; set; }
 
-        public Guid CreatedByUserId { get; set; }
+    public Guid CreatedByUserId { get; set; }
 
-        public TaskStatus Status { get; set; } = TaskStatus.Todo;
-        public TaskPriority Priority { get; set; } = TaskPriority.Medium;
+    public TaskStatus Status { get; set; } = TaskStatus.Todo;
+    public TaskPriority Priority { get; set; } = TaskPriority.Medium;
 
-        public DateTime? DueDate { get; set; }
-    }
+    public DateTimeOffset? DueDate { get; set; }
 }

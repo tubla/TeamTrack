@@ -1,0 +1,7 @@
+﻿namespace TeamTrack.Api.DTOs.Role;
+
+public class AssignRoleToUserDto
+{
+    public Guid UserId { get; set; }
+    public Guid RoleId { get; set; }
+}

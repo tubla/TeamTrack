@@ -1,15 +1,14 @@
-﻿namespace TeamTrack.Api.Models.Rbac
+﻿namespace TeamTrack.Api.Models.Rbac;
+
+public class Role : BaseEntity
 {
-    public class Role : BaseEntity
-    {
-        public string Name { get; set; } = default!;
+    public required string Name { get; set; }
 
-        // Multi-tenant scope
-        public Guid OrganizationId { get; set; }
-        public Organization Organization { get; set; } = default!;
+    // Multi-tenant scope
+    public Guid OrganizationId { get; set; }
+    public Organization Organization { get; set; } = null!;
 
-        // Navigation
-        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-        public ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
-    }
+    // Navigation
+    public ICollection<UserRole> UserRoles { get; set; } = [];
+    public ICollection<RolePermission> RolePermissions { get; set; } = [];
 }

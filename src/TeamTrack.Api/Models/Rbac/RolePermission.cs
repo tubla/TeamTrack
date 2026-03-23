@@ -1,11 +1,10 @@
-﻿namespace TeamTrack.Api.Models.Rbac
-{
-    public class RolePermission : BaseEntity
-    {
-        public Guid RoleId { get; set; }
-        public Role Role { get; set; } = default!;
+﻿namespace TeamTrack.Api.Models.Rbac;
 
-        public Guid PermissionId { get; set; }
-        public Permission Permission { get; set; } = default!;
-    }
+public class RolePermission : BaseEntity
+{
+    public Guid RoleId { get; set; }
+    public Role Role { get; set; } = null!;
+
+    public Guid PermissionId { get; set; }
+    public Permission Permission { get; set; } = null!;
 }

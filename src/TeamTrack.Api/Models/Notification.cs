@@ -1,16 +1,19 @@
-﻿namespace TeamTrack.Api.Models
+﻿namespace TeamTrack.Api.Models;
+
+public class Notification : BaseEntity
 {
-    public class Notification : BaseEntity
-    {
-        public Guid UserId { get; set; }
+    public Guid UserId { get; set; }
+    public User User { get; set; } = null!;
 
-        public string Title { get; set; } = default!;
-        public string Message { get; set; } = default!;
+    public Guid? OrganizationId { get; set; }
+    public Organization Organization { get; set; } = null!;
 
-        public bool IsRead { get; set; } = false;
+    public required string Title { get; set; }
+    public required string Message { get; set; }
 
-        public NotificationType Type { get; set; }
+    public bool IsRead { get; set; } = false;
 
-        public Guid? ReferenceId { get; set; } // Task / Project / etc.
-    }
+    public NotificationType Type { get; set; }
+
+    public Guid? ReferenceId { get; set; }
 }

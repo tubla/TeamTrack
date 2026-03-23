@@ -16,9 +16,13 @@
 
     public enum NotificationType
     {
+        General,
         TaskAssigned,
         CommentAdded,
         StatusChanged,
-        DueDateReminder
+        DueDateReminder,
+        OrgAccessRequested,
+        OrgAccessApproved,
+        OrgAccessRejected
     }
 }

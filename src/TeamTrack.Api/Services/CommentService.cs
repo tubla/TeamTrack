@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TeamTrack.Api.Data;
-using TeamTrack.Api.DTOs;
+using TeamTrack.Api.DTOs.Comment;
+using TeamTrack.Api.Exceptions;
 using TeamTrack.Api.Interfaces;
 using TeamTrack.Api.Models;
 
@@ -14,6 +15,16 @@ namespace TeamTrack.Api.Services
 
         public async Task<object> CreateAsync(CreateCommentDto dto)
         {
+            var orgId = _context.OrganizationId ?? throw new BadRequestException("Organization required");
+
+            // Validate task belongs to organization
+            var task = await _db.Tasks
+                .Include(t => t.Project)
+                .FirstOrDefaultAsync(t => t.Id == dto.TaskId && t.Project.OrganizationId == orgId);
+
+            if (task == null)
+                throw new NotFoundException("Task not found");
+
             var comment = new TaskComment
             {
                 TaskId = dto.TaskId,
@@ -23,10 +34,10 @@ namespace TeamTrack.Api.Services
 
             _db.TaskComments.Add(comment);
 
-            // 🔥 Add Activity Log
+            // Add Activity Log
             _db.ActivityLogs.Add(new ActivityLog
             {
-                OrganizationId = _context.OrganizationId!.Value,
+                OrganizationId = orgId,
                 UserId = _context.UserId,
                 Action = "CommentAdded",
                 EntityType = "Task",
@@ -36,27 +47,55 @@ namespace TeamTrack.Api.Services
 
             await _db.SaveChangesAsync();
 
-            // Notify task owner about the new comment
-            await _notificationService.CreateAsync(
-                _context.UserId,
-                "New Comment",
-                "Someone commented on your task",
-                NotificationType.CommentAdded,
-                dto.TaskId
-            );
+            // Notify task creator/assignee about the new comment
+            if (task.CreatedByUserId != _context.UserId)
+            {
+                await _notificationService.CreateAsync(
+                    task.CreatedByUserId,
+                    orgId,
+                    "New Comment",
+                    $"Someone commented on task: {task.Title}",
+                    NotificationType.CommentAdded,
+                    dto.TaskId
+                );
+            }
+
+            if (task.AssignedToUserId.HasValue && task.AssignedToUserId != _context.UserId && task.AssignedToUserId != task.CreatedByUserId)
+            {
+                await _notificationService.CreateAsync(
+                    task.AssignedToUserId.Value,
+                    orgId,
+                    "New Comment",
+                    $"Someone commented on task: {task.Title}",
+                    NotificationType.CommentAdded,
+                    dto.TaskId
+                );
+            }
 
             return new { comment.Id, comment.Content };
         }
 
         public async Task<object> GetByTaskAsync(Guid taskId)
         {
+            var orgId = _context.OrganizationId ?? throw new BadRequestException("Organization required");
+
+            // Validate task belongs to organization
+            var taskExists = await _db.Tasks
+                .Include(t => t.Project)
+                .AnyAsync(t => t.Id == taskId && t.Project.OrganizationId == orgId);
+
+            if (!taskExists)
+                throw new NotFoundException("Task not found");
+
             var comments = await _db.TaskComments
                 .Where(c => c.TaskId == taskId)
+                .OrderByDescending(c => c.CreatedAt)
                 .Select(c => new
                 {
                     c.Id,
                     c.Content,
-                    c.CreatedAt
+                    c.CreatedAt,
+                    c.UserId
                 }).ToListAsync();
 
             return comments;

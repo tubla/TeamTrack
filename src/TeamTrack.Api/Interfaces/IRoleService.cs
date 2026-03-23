@@ -1,5 +1,6 @@
 ﻿using TeamTrack.Api.Common;
-using TeamTrack.Api.DTOs;
+using TeamTrack.Api.DTOs.Permission;
+using TeamTrack.Api.DTOs.Role;
 
 namespace TeamTrack.Api.Interfaces
 {
@@ -8,6 +9,8 @@ namespace TeamTrack.Api.Interfaces
         Task<object> CreateRoleAsync(CreateRoleDto dto);
         Task AssignPermissionsAsync(AssignPermissionsDto dto);
         Task AssignRoleToUserAsync(AssignRoleToUserDto dto);
-        Task<object> GetRolesAsync(QueryParams param);
+        Task RemoveRoleFromUserAsync(Guid userId, Guid roleId);
+        Task<ApiResponse<List<RoleDto>>> GetRolesAsync();
+        Task<object> GetRoleWithPermissionsAsync(Guid roleId);
     }
 }

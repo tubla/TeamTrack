@@ -8,18 +8,32 @@ namespace TeamTrack.Api.Services
 
         public async Task<string> UploadAsync(IFormFile file)
         {
-            var folder = Path.Combine(_env.WebRootPath, "uploads");
+            var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
+            Directory.CreateDirectory(uploadsFolder);
 
-            if (!Directory.Exists(folder))
-                Directory.CreateDirectory(folder);
+            var uniqueName = $"{Guid.NewGuid()}_{file.FileName}";
+            var filePath = Path.Combine(uploadsFolder, uniqueName);
 
-            var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
-            var path = Path.Combine(folder, fileName);
-
-            using var stream = new FileStream(path, FileMode.Create);
+            using var stream = new FileStream(filePath, FileMode.Create);
             await file.CopyToAsync(stream);
 
-            return $"/uploads/{fileName}";
+            return $"/uploads/{uniqueName}";
+        }
+
+        public Task DeleteAsync(string fileUrl)
+        {
+            if (string.IsNullOrEmpty(fileUrl))
+                return Task.CompletedTask;
+
+            var fileName = Path.GetFileName(fileUrl);
+            var filePath = Path.Combine(_env.WebRootPath, "uploads", fileName);
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

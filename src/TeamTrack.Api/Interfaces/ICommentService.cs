@@ -1,4 +1,4 @@
-﻿using TeamTrack.Api.DTOs;
+﻿using TeamTrack.Api.DTOs.Comment;
 
 namespace TeamTrack.Api.Interfaces
 {
